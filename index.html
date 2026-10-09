@@ -20,11 +20,24 @@
             margin: 0;
         }
         </style>
-        <title></title>
+        <title>Old Fort, NC | Utility Infrastructure Reference Map</title>
+        <style>
+          .of-brand { position: absolute; z-index: 900; top: 13px; left: 70px; background: rgba(255,255,255,.96); border: 1px solid #dce5e8; border-radius: 9px; box-shadow: 0 3px 14px #1c31441a; padding: 9px 14px; font: 600 13px/1.3 Arial,sans-serif; color: #173a50; pointer-events: none; }
+          .of-brand strong {display:block;letter-spacing:1px;font-size:15px;} .of-brand strong span {color:#278b99;} .of-brand small {display:block;font-size:9px;letter-spacing:1px;color:#58717d;margin-top:2px;}
+          .of-disclaimer {position:absolute;z-index:900;bottom:28px;left:12px;max-width:min(410px,calc(100vw - 24px));background:#fffffff5;box-shadow:0 2px 14px #1c314433;border:1px solid #dce5e8;border-radius:8px;color:#294251;font:12px/1.5 Arial,sans-serif;}
+          .of-disclaimer summary {padding:9px 13px;font-weight:700;cursor:pointer;color:#174a63;} .of-disclaimer p {margin:0;padding:0 13px 10px;}
+          .of-popup {font:12px/1.4 Arial,sans-serif;min-width:200px;max-width:305px;color:#263f4c;} .of-popup h3 {margin:0 0 9px;font-size:15px;color:#12465d;border-bottom:2px solid #1c93a0;padding-bottom:7px;} .of-row {display:flex;gap:12px;justify-content:space-between;padding:5px 0;border-bottom:1px solid #edf1f3;} .of-key {font-weight:600;color:#55707c;flex:0 0 43%;} .of-val {text-align:right;overflow-wrap:anywhere;flex:1;} .of-note {margin:10px 0 0;padding:9px;background:#fff6e7;border-left:3px solid #dfad57;color:#655337;font-size:11px;} .of-empty {color:#60727b;}
+          @media(max-width:600px){.of-brand {left:55px;top:9px;padding:6px 8px;} .of-brand strong {font-size:12px;} .of-brand small {font-size:8px;} .of-disclaimer {bottom:25px;max-width:calc(100vw - 24px);}}
+        </style>
     </head>
     <body>
-        <div id="map">
-        </div>
+        <div id="map"></div>
+        <div class="of-brand" role="banner"><strong>OLD FORT <span>NC</span></strong><small>UTILITY INFRASTRUCTURE · REFERENCE MAP</small></div>
+        <details class="of-disclaimer"><summary>Data coverage &amp; limitations</summary>
+          <p>This map compiles publicly available reference information. Well and wastewater facility locations are approximate. Water and sewer mains, pipe sizes, hydrants, water tank locations and sewer pump stations were not available for mapping and are <strong>not represented</strong>.</p>
+          <p>Electric infrastructure is sourced from OpenStreetMap; service territory is a historical 2018 reference. FCC broadband is aggregated 2025 data, not address-level service confirmation. The growth corridor is a project study area, not an official ETJ.</p>
+          <p>For planning reference only. Confirm utility availability, location and capacity with the respective providers before design or investment decisions.</p>
+        </details>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
@@ -37,14 +50,16 @@
         <script src="js/leaflet-measure.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
         <script src="js/leaflet-search.js"></script>
-        <script src="data/Old_Fort_UtilitiesStudy_Area_1.js"></script>
-        <script src="data/Broadband_FCC_Availability_2025_2.js"></script>
-        <script src="data/Old_Fort_UtilitiesParcels_Clip_3.js"></script>
-        <script src="data/Sewer_Facilities_4.js"></script>
-        <script src="data/Water_Facilities_5.js"></script>
-        <script src="data/Old_Fort_UtilitiesElectric_Lines_OldFort_6.js"></script>
-        <script src="data/Old_Fort_UtilitiesElectric_Substations_OldFort_7.js"></script>
-        <script src="data/Old_Fort_Addresses_8.js"></script>
+        <script src="data/OldFortGrowthCorridor_1.js"></script>
+        <script src="data/OldFortElectric_Service_Territory_2.js"></script>
+        <script src="data/Broadband_FCC_Availability_2025_3.js"></script>
+        <script src="data/OldFortMunicipal_Boundary_4.js"></script>
+        <script src="data/OldFortParcels_5.js"></script>
+        <script src="data/OldFortSewer_Facilities_6.js"></script>
+        <script src="data/OldFortWaterFacilities_7.js"></script>
+        <script src="data/OldFortElectricLines_8.js"></script>
+        <script src="data/OldFortElectricSubstations_9.js"></script>
+        <script src="data/OldFortAddresses_10.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
@@ -75,7 +90,7 @@
         var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             pane: 'pane_OpenStreetMap_0',
             opacity: 1.0,
-            attribution: '',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
             minZoom: 1,
             maxZoom: 28,
             minNativeZoom: 0,
@@ -83,69 +98,31 @@
         });
         layer_OpenStreetMap_0;
         map.addLayer(layer_OpenStreetMap_0);
-        function pop_Old_Fort_UtilitiesStudy_Area_1(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Length'] !== null ? autolinker.link(feature.properties['Shape_Length'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Area'] !== null ? autolinker.link(feature.properties['Shape_Area'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID_1'] !== null ? autolinker.link(feature.properties['OBJECTID_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? autolinker.link(feature.properties['Shape_Leng'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid_3'] !== null ? autolinker.link(feature.properties['fid_3'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID_3'] !== null ? autolinker.link(feature.properties['OBJECTID_3'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STREET'] !== null ? autolinker.link(feature.properties['STREET'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COMMUNIT_L'] !== null ? autolinker.link(feature.properties['COMMUNIT_L'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid_2'] !== null ? autolinker.link(feature.properties['fid_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Name_2'] !== null ? autolinker.link(feature.properties['Name_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Length_2'] !== null ? autolinker.link(feature.properties['Shape_Length_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Area_2'] !== null ? autolinker.link(feature.properties['Shape_Area_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID_2'] !== null ? autolinker.link(feature.properties['OBJECTID_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID_1_2'] !== null ? autolinker.link(feature.properties['OBJECTID_1_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape_Leng_2'] !== null ? autolinker.link(feature.properties['Shape_Leng_2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+
+        // Client-facing popups: an explicit, source-aware field allowlist.
+        function ofEscape(value) {
+            return String(value).replace(/[&<>"']/g, function(ch) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+            });
+        }
+        function ofPopup(feature, heading, fields, note) {
+            var props = (feature && feature.properties) || {};
+            var rows = fields.map(function(f) {
+                var v = props[f[0]];
+                if (v === undefined || v === null || String(v).trim() === '' || String(v).toLowerCase() === 'null') return '';
+                if (typeof v === 'number') v = Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US', {maximumFractionDigits: 2});
+                return '<div class="of-row"><span class="of-key">' + ofEscape(f[1]) + '</span><span class="of-val">' + ofEscape(v) + '</span></div>';
+            }).join('');
+            return '<section class="of-popup"><h3>' + ofEscape(heading) + '</h3>' + (rows || '<div class="of-empty">No published attributes available</div>') + (note ? '<p class="of-note">' + ofEscape(note) + '</p>' : '') + '</section>';
+        }
+        function pop_OldFortGrowthCorridor_1(feature, layer) {
+            var popupContent = ofPopup(feature, 'Study Area / Growth Corridors', [['Name', 'Name'], ['STREET', 'Road / Corridor']], 'Project-defined study area; not an official extraterritorial jurisdiction boundary.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Old_Fort_UtilitiesStudy_Area_1_0() {
+        function style_OldFortGrowthCorridor_1_0() {
             return {
-                pane: 'pane_Old_Fort_UtilitiesStudy_Area_1',
+                pane: 'pane_OldFortGrowthCorridor_1',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.1)',
                 dashArray: '',
@@ -158,126 +135,62 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Old_Fort_UtilitiesStudy_Area_1');
-        map.getPane('pane_Old_Fort_UtilitiesStudy_Area_1').style.zIndex = 401;
-        map.getPane('pane_Old_Fort_UtilitiesStudy_Area_1').style['mix-blend-mode'] = 'normal';
-        var layer_Old_Fort_UtilitiesStudy_Area_1 = new L.geoJson(json_Old_Fort_UtilitiesStudy_Area_1, {
+        map.createPane('pane_OldFortGrowthCorridor_1');
+        map.getPane('pane_OldFortGrowthCorridor_1').style.zIndex = 401;
+        map.getPane('pane_OldFortGrowthCorridor_1').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortGrowthCorridor_1 = new L.geoJson(json_OldFortGrowthCorridor_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Old_Fort_UtilitiesStudy_Area_1',
-            layerName: 'layer_Old_Fort_UtilitiesStudy_Area_1',
-            pane: 'pane_Old_Fort_UtilitiesStudy_Area_1',
-            onEachFeature: pop_Old_Fort_UtilitiesStudy_Area_1,
-            style: style_Old_Fort_UtilitiesStudy_Area_1_0,
+            dataVar: 'json_OldFortGrowthCorridor_1',
+            layerName: 'layer_OldFortGrowthCorridor_1',
+            pane: 'pane_OldFortGrowthCorridor_1',
+            onEachFeature: pop_OldFortGrowthCorridor_1,
+            style: style_OldFortGrowthCorridor_1_0,
         });
-        bounds_group.addLayer(layer_Old_Fort_UtilitiesStudy_Area_1);
-        map.addLayer(layer_Old_Fort_UtilitiesStudy_Area_1);
-        function pop_Broadband_FCC_Availability_2025_2(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['hex_id'] !== null ? autolinker.link(feature.properties['hex_id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['County'] !== null ? autolinker.link(feature.properties['County'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['hex_county'] !== null ? autolinker.link(feature.properties['hex_county'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TotalBSL'] !== null ? autolinker.link(feature.properties['TotalBSL'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['UnservedLocations'] !== null ? autolinker.link(feature.properties['UnservedLocations'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Percent_Unserved'] !== null ? autolinker.link(feature.properties['Percent_Unserved'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['UnderservedLocations'] !== null ? autolinker.link(feature.properties['UnderservedLocations'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Percent_Underserved'] !== null ? autolinker.link(feature.properties['Percent_Underserved'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['UnservedNoServiceLocations'] !== null ? autolinker.link(feature.properties['UnservedNoServiceLocations'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Percent_Unserved_No_Service'] !== null ? autolinker.link(feature.properties['Percent_Unserved_No_Service'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FundedLocations'] !== null ? autolinker.link(feature.properties['FundedLocations'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentEligible'] !== null ? autolinker.link(feature.properties['PercentEligible'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EligibleLocations'] !== null ? autolinker.link(feature.properties['EligibleLocations'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Count_Fiber'] !== null ? autolinker.link(feature.properties['Count_Fiber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Count_Cable'] !== null ? autolinker.link(feature.properties['Count_Cable'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Count_Copper'] !== null ? autolinker.link(feature.properties['Count_Copper'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Count_LicFW'] !== null ? autolinker.link(feature.properties['Count_LicFW'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Count_Lbrfw'] !== null ? autolinker.link(feature.properties['Count_Lbrfw'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentFiber'] !== null ? autolinker.link(feature.properties['PercentFiber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentCable'] !== null ? autolinker.link(feature.properties['PercentCable'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentCopper'] !== null ? autolinker.link(feature.properties['PercentCopper'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentLicFW'] !== null ? autolinker.link(feature.properties['PercentLicFW'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PercentLBRFW'] !== null ? autolinker.link(feature.properties['PercentLBRFW'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EligibleLocations_Unserved'] !== null ? autolinker.link(feature.properties['EligibleLocations_Unserved'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EligibleLocations_NoService'] !== null ? autolinker.link(feature.properties['EligibleLocations_NoService'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EligibleLocations_Underserved'] !== null ? autolinker.link(feature.properties['EligibleLocations_Underserved'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Date_Aggregated'] !== null ? autolinker.link(feature.properties['Date_Aggregated'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FCC_Version'] !== null ? autolinker.link(feature.properties['FCC_Version'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape__Area'] !== null ? autolinker.link(feature.properties['Shape__Area'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape__Length'] !== null ? autolinker.link(feature.properties['Shape__Length'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortGrowthCorridor_1);
+        map.addLayer(layer_OldFortGrowthCorridor_1);
+        function pop_OldFortElectric_Service_Territory_2(feature, layer) {
+            var popupContent = ofPopup(feature, 'Electric Service Territory', [['OWNER_1', 'Utility'], ['COMPANYT_1', 'Utility type']], 'Historical 2018 service-territory reference; confirm current coverage with provider.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Broadband_FCC_Availability_2025_2_0(feature) {
+        function style_OldFortElectric_Service_Territory_2_0() {
+            return {
+                pane: 'pane_OldFortElectric_Service_Territory_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.2)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,193,239,0.2)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_OldFortElectric_Service_Territory_2');
+        map.getPane('pane_OldFortElectric_Service_Territory_2').style.zIndex = 402;
+        map.getPane('pane_OldFortElectric_Service_Territory_2').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortElectric_Service_Territory_2 = new L.geoJson(json_OldFortElectric_Service_Territory_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_OldFortElectric_Service_Territory_2',
+            layerName: 'layer_OldFortElectric_Service_Territory_2',
+            pane: 'pane_OldFortElectric_Service_Territory_2',
+            onEachFeature: pop_OldFortElectric_Service_Territory_2,
+            style: style_OldFortElectric_Service_Territory_2_0,
+        });
+        bounds_group.addLayer(layer_OldFortElectric_Service_Territory_2);
+        function pop_Broadband_FCC_Availability_2025_3(feature, layer) {
+            var popupContent = ofPopup(feature, 'FCC Broadband Availability', [['County', 'County'], ['TotalBSL', 'Broadband-serviceable locations'], ['UnservedLocations', 'Unserved locations'], ['Percent_Unserved', 'Unserved (%)'], ['Percent_Underserved', 'Underserved (%)'], ['PercentFiber', 'Fiber availability (%)'], ['PercentCable', 'Cable availability (%)'], ['Date_Aggregated', 'Aggregation date'], ['FCC_Version', 'FCC data version']], 'FCC aggregated hexagon data; not a parcel-level service guarantee. Hexagons may extend beyond the study area.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
+        }
+
+        function style_Broadband_FCC_Availability_2025_3_0(feature) {
             if (feature.properties['Percent_Unserved'] >= 0.000000 && feature.properties['Percent_Unserved'] <= 20.000000 ) {
                 return {
-                pane: 'pane_Broadband_FCC_Availability_2025_2',
+                pane: 'pane_Broadband_FCC_Availability_2025_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.4)',
                 dashArray: '',
@@ -292,7 +205,7 @@
             }
             if (feature.properties['Percent_Unserved'] >= 20.000000 && feature.properties['Percent_Unserved'] <= 40.000000 ) {
                 return {
-                pane: 'pane_Broadband_FCC_Availability_2025_2',
+                pane: 'pane_Broadband_FCC_Availability_2025_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.4)',
                 dashArray: '',
@@ -307,7 +220,7 @@
             }
             if (feature.properties['Percent_Unserved'] >= 40.000000 && feature.properties['Percent_Unserved'] <= 60.000000 ) {
                 return {
-                pane: 'pane_Broadband_FCC_Availability_2025_2',
+                pane: 'pane_Broadband_FCC_Availability_2025_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.4)',
                 dashArray: '',
@@ -322,7 +235,7 @@
             }
             if (feature.properties['Percent_Unserved'] >= 60.000000 && feature.properties['Percent_Unserved'] <= 80.000000 ) {
                 return {
-                pane: 'pane_Broadband_FCC_Availability_2025_2',
+                pane: 'pane_Broadband_FCC_Availability_2025_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.4)',
                 dashArray: '',
@@ -337,7 +250,7 @@
             }
             if (feature.properties['Percent_Unserved'] >= 80.000000 && feature.properties['Percent_Unserved'] <= 100.000000 ) {
                 return {
-                pane: 'pane_Broadband_FCC_Availability_2025_2',
+                pane: 'pane_Broadband_FCC_Availability_2025_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.4)',
                 dashArray: '',
@@ -351,187 +264,60 @@
             }
             }
         }
-        map.createPane('pane_Broadband_FCC_Availability_2025_2');
-        map.getPane('pane_Broadband_FCC_Availability_2025_2').style.zIndex = 402;
-        map.getPane('pane_Broadband_FCC_Availability_2025_2').style['mix-blend-mode'] = 'normal';
-        var layer_Broadband_FCC_Availability_2025_2 = new L.geoJson(json_Broadband_FCC_Availability_2025_2, {
+        map.createPane('pane_Broadband_FCC_Availability_2025_3');
+        map.getPane('pane_Broadband_FCC_Availability_2025_3').style.zIndex = 403;
+        map.getPane('pane_Broadband_FCC_Availability_2025_3').style['mix-blend-mode'] = 'normal';
+        var layer_Broadband_FCC_Availability_2025_3 = new L.geoJson(json_Broadband_FCC_Availability_2025_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Broadband_FCC_Availability_2025_2',
-            layerName: 'layer_Broadband_FCC_Availability_2025_2',
-            pane: 'pane_Broadband_FCC_Availability_2025_2',
-            onEachFeature: pop_Broadband_FCC_Availability_2025_2,
-            style: style_Broadband_FCC_Availability_2025_2_0,
+            dataVar: 'json_Broadband_FCC_Availability_2025_3',
+            layerName: 'layer_Broadband_FCC_Availability_2025_3',
+            pane: 'pane_Broadband_FCC_Availability_2025_3',
+            onEachFeature: pop_Broadband_FCC_Availability_2025_3,
+            style: style_Broadband_FCC_Availability_2025_3_0,
         });
-        bounds_group.addLayer(layer_Broadband_FCC_Availability_2025_2);
-        function pop_Old_Fort_UtilitiesParcels_Clip_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PIN'] !== null ? autolinker.link(feature.properties['PIN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['AccountNumber'] !== null ? autolinker.link(feature.properties['AccountNumber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MDFormattedFirst13'] !== null ? autolinker.link(feature.properties['MDFormattedFirst13'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Address1'] !== null ? autolinker.link(feature.properties['Address1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Address2'] !== null ? autolinker.link(feature.properties['Address2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Name1'] !== null ? autolinker.link(feature.properties['Name1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Name2'] !== null ? autolinker.link(feature.properties['Name2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['StreetName'] !== null ? autolinker.link(feature.properties['StreetName'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['StreetType'] !== null ? autolinker.link(feature.properties['StreetType'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['HouseNumber'] !== null ? autolinker.link(feature.properties['HouseNumber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ParcelBuildingValue'] !== null ? autolinker.link(feature.properties['ParcelBuildingValue'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ParcelObxfValue'] !== null ? autolinker.link(feature.properties['ParcelObxfValue'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ParcelLandValue'] !== null ? autolinker.link(feature.properties['ParcelLandValue'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TotalMarketValue'] !== null ? autolinker.link(feature.properties['TotalMarketValue'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TotalAssessedValue'] !== null ? autolinker.link(feature.properties['TotalAssessedValue'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['City'] !== null ? autolinker.link(feature.properties['City'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['State'] !== null ? autolinker.link(feature.properties['State'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ZipCode'] !== null ? autolinker.link(feature.properties['ZipCode'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LegalDescription'] !== null ? autolinker.link(feature.properties['LegalDescription'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TownshipCode'] !== null ? autolinker.link(feature.properties['TownshipCode'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CityCode'] !== null ? autolinker.link(feature.properties['CityCode'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['DeedDate'] !== null ? autolinker.link(feature.properties['DeedDate'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['InstrumentType'] !== null ? autolinker.link(feature.properties['InstrumentType'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['DeedBook1'] !== null ? autolinker.link(feature.properties['DeedBook1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['DeedPage1'] !== null ? autolinker.link(feature.properties['DeedPage1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SaleMonth1'] !== null ? autolinker.link(feature.properties['SaleMonth1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SaleDay1'] !== null ? autolinker.link(feature.properties['SaleDay1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SaleYear1'] !== null ? autolinker.link(feature.properties['SaleYear1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['DeedBook2'] !== null ? autolinker.link(feature.properties['DeedBook2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LegalLandUnits'] !== null ? autolinker.link(feature.properties['LegalLandUnits'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LegalLandType'] !== null ? autolinker.link(feature.properties['LegalLandType'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TaxCode1'] !== null ? autolinker.link(feature.properties['TaxCode1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TaxCode2'] !== null ? autolinker.link(feature.properties['TaxCode2'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TaxCode3'] !== null ? autolinker.link(feature.properties['TaxCode3'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TaxCode4'] !== null ? autolinker.link(feature.properties['TaxCode4'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TaxCode5'] !== null ? autolinker.link(feature.properties['TaxCode5'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MDFirst13'] !== null ? autolinker.link(feature.properties['MDFirst13'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PinNumber'] !== null ? autolinker.link(feature.properties['PinNumber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MD10Digit'] !== null ? autolinker.link(feature.properties['MD10Digit'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Shape.STArea()'] !== null ? autolinker.link(feature.properties['Shape.STArea()'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['created_user'] !== null ? autolinker.link(feature.properties['created_user'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['created_date'] !== null ? autolinker.link(feature.properties['created_date'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['last_edited_user'] !== null ? autolinker.link(feature.properties['last_edited_user'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['last_edited_date'] !== null ? autolinker.link(feature.properties['last_edited_date'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Map'] !== null ? autolinker.link(feature.properties['Map'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Block'] !== null ? autolinker.link(feature.properties['Block'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['Lot'] !== null ? autolinker.link(feature.properties['Lot'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CALCULATED_ACREAGE'] !== null ? autolinker.link(feature.properties['CALCULATED_ACREAGE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TOTAL_ACREAGE'] !== null ? autolinker.link(feature.properties['TOTAL_ACREAGE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ParcelNumber'] !== null ? autolinker.link(feature.properties['ParcelNumber'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['MC_GISID'] !== null ? autolinker.link(feature.properties['MC_GISID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_Broadband_FCC_Availability_2025_3);
+        function pop_OldFortMunicipal_Boundary_4(feature, layer) {
+            var popupContent = ofPopup(feature, 'Municipal Boundary', [['Name', 'Municipality']], 'Boundary reference from McDowell County GIS.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Old_Fort_UtilitiesParcels_Clip_3_0() {
+        function style_OldFortMunicipal_Boundary_4_0() {
             return {
-                pane: 'pane_Old_Fort_UtilitiesParcels_Clip_3',
+                pane: 'pane_OldFortMunicipal_Boundary_4',
+                opacity: 1,
+                color: 'rgba(255,0,0,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 6.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_OldFortMunicipal_Boundary_4');
+        map.getPane('pane_OldFortMunicipal_Boundary_4').style.zIndex = 404;
+        map.getPane('pane_OldFortMunicipal_Boundary_4').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortMunicipal_Boundary_4 = new L.geoJson(json_OldFortMunicipal_Boundary_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_OldFortMunicipal_Boundary_4',
+            layerName: 'layer_OldFortMunicipal_Boundary_4',
+            pane: 'pane_OldFortMunicipal_Boundary_4',
+            onEachFeature: pop_OldFortMunicipal_Boundary_4,
+            style: style_OldFortMunicipal_Boundary_4_0,
+        });
+        bounds_group.addLayer(layer_OldFortMunicipal_Boundary_4);
+        function pop_OldFortParcels_5(feature, layer) {
+            var popupContent = ofPopup(feature, 'Property Parcel', [['PIN', 'Parcel PIN'], ['Address1', 'Property address'], ['City', 'City'], ['ZipCode', 'ZIP code']], 'Parcel reference data; not a utility connection record.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
+        }
+
+        function style_OldFortParcels_5_0() {
+            return {
+                pane: 'pane_OldFortParcels_5',
                 opacity: 1,
                 color: 'rgba(0,0,0,0.5)',
                 dashArray: '',
@@ -544,63 +330,28 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Old_Fort_UtilitiesParcels_Clip_3');
-        map.getPane('pane_Old_Fort_UtilitiesParcels_Clip_3').style.zIndex = 403;
-        map.getPane('pane_Old_Fort_UtilitiesParcels_Clip_3').style['mix-blend-mode'] = 'normal';
-        var layer_Old_Fort_UtilitiesParcels_Clip_3 = new L.geoJson(json_Old_Fort_UtilitiesParcels_Clip_3, {
+        map.createPane('pane_OldFortParcels_5');
+        map.getPane('pane_OldFortParcels_5').style.zIndex = 405;
+        map.getPane('pane_OldFortParcels_5').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortParcels_5 = new L.geoJson(json_OldFortParcels_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Old_Fort_UtilitiesParcels_Clip_3',
-            layerName: 'layer_Old_Fort_UtilitiesParcels_Clip_3',
-            pane: 'pane_Old_Fort_UtilitiesParcels_Clip_3',
-            onEachFeature: pop_Old_Fort_UtilitiesParcels_Clip_3,
-            style: style_Old_Fort_UtilitiesParcels_Clip_3_0,
+            dataVar: 'json_OldFortParcels_5',
+            layerName: 'layer_OldFortParcels_5',
+            pane: 'pane_OldFortParcels_5',
+            onEachFeature: pop_OldFortParcels_5,
+            style: style_OldFortParcels_5_0,
         });
-        bounds_group.addLayer(layer_Old_Fort_UtilitiesParcels_Clip_3);
-        map.addLayer(layer_Old_Fort_UtilitiesParcels_Clip_3);
-        function pop_Sewer_Facilities_4(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">facility_name</th>\
-                        <td>' + (feature.properties['facility_name'] !== null ? autolinker.link(feature.properties['facility_name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>facility_type</strong><br />' + (feature.properties['facility_type'] !== null ? autolinker.link(feature.properties['facility_type'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['status'] !== null ? autolinker.link(feature.properties['status'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['capacity'] !== null ? autolinker.link(feature.properties['capacity'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['capacity_unit'] !== null ? autolinker.link(feature.properties['capacity_unit'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['avg_flow'] !== null ? autolinker.link(feature.properties['avg_flow'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['source_date'] !== null ? autolinker.link(feature.properties['source_date'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['accuracy'] !== null ? autolinker.link(feature.properties['accuracy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['notes'] !== null ? autolinker.link(feature.properties['notes'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortParcels_5);
+        map.addLayer(layer_OldFortParcels_5);
+        function pop_OldFortSewer_Facilities_6(feature, layer) {
+            var popupContent = ofPopup(feature, 'Sewer Facility', [['facility_name', 'Facility'], ['facility_type', 'Type'], ['status', 'Status'], ['capacity', 'Capacity'], ['capacity_unit', 'Capacity unit'], ['avg_flow', 'Average flow'], ['source', 'Source'], ['source_date', 'Source date'], ['accuracy', 'Location accuracy'], ['notes', 'Notes']], 'Approximate facility location; sewer pipe network and pump stations are not mapped.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Sewer_Facilities_4_0() {
+        function style_OldFortSewer_Facilities_6_0() {
             return {
-                pane: 'pane_Sewer_Facilities_4',
+                pane: 'pane_OldFortSewer_Facilities_6',
                 radius: 4.0,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
@@ -614,64 +365,33 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Sewer_Facilities_4');
-        map.getPane('pane_Sewer_Facilities_4').style.zIndex = 404;
-        map.getPane('pane_Sewer_Facilities_4').style['mix-blend-mode'] = 'normal';
-        var layer_Sewer_Facilities_4 = new L.geoJson(json_Sewer_Facilities_4, {
+        map.createPane('pane_OldFortSewer_Facilities_6');
+        map.getPane('pane_OldFortSewer_Facilities_6').style.zIndex = 406;
+        map.getPane('pane_OldFortSewer_Facilities_6').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortSewer_Facilities_6 = new L.geoJson(json_OldFortSewer_Facilities_6, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Sewer_Facilities_4',
-            layerName: 'layer_Sewer_Facilities_4',
-            pane: 'pane_Sewer_Facilities_4',
-            onEachFeature: pop_Sewer_Facilities_4,
+            dataVar: 'json_OldFortSewer_Facilities_6',
+            layerName: 'layer_OldFortSewer_Facilities_6',
+            pane: 'pane_OldFortSewer_Facilities_6',
+            onEachFeature: pop_OldFortSewer_Facilities_6,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Sewer_Facilities_4_0(feature));
+                return L.circleMarker(latlng, style_OldFortSewer_Facilities_6_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Sewer_Facilities_4);
-        function pop_Water_Facilities_5(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['facility_name'] !== null ? autolinker.link(feature.properties['facility_name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['facility_type'] !== null ? autolinker.link(feature.properties['facility_type'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['status'] !== null ? autolinker.link(feature.properties['status'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['capacity'] !== null ? autolinker.link(feature.properties['capacity'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['capacity_unit'] !== null ? autolinker.link(feature.properties['capacity_unit'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['source_date'] !== null ? autolinker.link(feature.properties['source_date'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['accuracy'] !== null ? autolinker.link(feature.properties['accuracy'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['notes'] !== null ? autolinker.link(feature.properties['notes'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortSewer_Facilities_6);
+        function pop_OldFortWaterFacilities_7(feature, layer) {
+            var popupContent = ofPopup(feature, 'Water Facility', [['facility_name', 'Facility'], ['facility_type', 'Type'], ['status', 'Status'], ['capacity', 'Capacity'], ['capacity_unit', 'Capacity unit'], ['source', 'Source'], ['source_date', 'Source date'], ['accuracy', 'Location accuracy'], ['notes', 'Notes']], 'Well locations interpreted approximately from published materials; water mains, hydrants and storage-tank locations are not mapped.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Water_Facilities_5_0() {
+        function style_OldFortWaterFacilities_7_0() {
             return {
-                pane: 'pane_Water_Facilities_5',
+                pane: 'pane_OldFortWaterFacilities_7',
                 radius: 3.6,
                 opacity: 1,
                 color: 'rgba(128,17,25,1.0)',
@@ -685,78 +405,35 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Water_Facilities_5');
-        map.getPane('pane_Water_Facilities_5').style.zIndex = 405;
-        map.getPane('pane_Water_Facilities_5').style['mix-blend-mode'] = 'normal';
-        var layer_Water_Facilities_5 = new L.geoJson(json_Water_Facilities_5, {
+        map.createPane('pane_OldFortWaterFacilities_7');
+        map.getPane('pane_OldFortWaterFacilities_7').style.zIndex = 407;
+        map.getPane('pane_OldFortWaterFacilities_7').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortWaterFacilities_7 = new L.geoJson(json_OldFortWaterFacilities_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Water_Facilities_5',
-            layerName: 'layer_Water_Facilities_5',
-            pane: 'pane_Water_Facilities_5',
-            onEachFeature: pop_Water_Facilities_5,
+            dataVar: 'json_OldFortWaterFacilities_7',
+            layerName: 'layer_OldFortWaterFacilities_7',
+            pane: 'pane_OldFortWaterFacilities_7',
+            onEachFeature: pop_OldFortWaterFacilities_7,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Water_Facilities_5_0(feature));
+                return L.circleMarker(latlng, style_OldFortWaterFacilities_7_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Water_Facilities_5);
-        function pop_Old_Fort_UtilitiesElectric_Lines_OldFort_6(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['@id'] !== null ? autolinker.link(feature.properties['@id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['barrier'] !== null ? autolinker.link(feature.properties['barrier'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cables'] !== null ? autolinker.link(feature.properties['cables'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['circuits'] !== null ? autolinker.link(feature.properties['circuits'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['frequency'] !== null ? autolinker.link(feature.properties['frequency'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['operator'] !== null ? autolinker.link(feature.properties['operator'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['operator:wikidata'] !== null ? autolinker.link(feature.properties['operator:wikidata'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['power'] !== null ? autolinker.link(feature.properties['power'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['substation'] !== null ? autolinker.link(feature.properties['substation'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['voltage'] !== null ? autolinker.link(feature.properties['voltage'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['wires'] !== null ? autolinker.link(feature.properties['wires'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortWaterFacilities_7);
+        function pop_OldFortElectricLines_8(feature, layer) {
+            var popupContent = ofPopup(feature, 'Electric Line', [['name', 'Name'], ['voltage', 'Voltage (V)'], ['operator', 'Operator'], ['power', 'Infrastructure type'], ['cables', 'Cables'], ['circuits', 'Circuits']], 'OpenStreetMap-derived infrastructure; incomplete and not independently verified.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Old_Fort_UtilitiesElectric_Lines_OldFort_6_0(feature) {
+        function style_OldFortElectricLines_8_0(feature) {
             switch(String(feature.properties['voltage'])) {
                 case '100000':
                     return {
-                pane: 'pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
+                pane: 'pane_OldFortElectricLines_8',
                 opacity: 1,
                 color: 'rgba(255,127,0,1.0)',
                 dashArray: '',
@@ -769,7 +446,7 @@
                     break;
                 case '115000':
                     return {
-                pane: 'pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
+                pane: 'pane_OldFortElectricLines_8',
                 opacity: 1,
                 color: 'rgba(219,30,42,1.0)',
                 dashArray: '',
@@ -782,7 +459,7 @@
                     break;
                 case '44000':
                     return {
-                pane: 'pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
+                pane: 'pane_OldFortElectricLines_8',
                 opacity: 1,
                 color: 'rgba(175,38,170,1.0)',
                 dashArray: '',
@@ -795,73 +472,30 @@
                     break;
             }
         }
-        map.createPane('pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6');
-        map.getPane('pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6').style.zIndex = 406;
-        map.getPane('pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6').style['mix-blend-mode'] = 'normal';
-        var layer_Old_Fort_UtilitiesElectric_Lines_OldFort_6 = new L.geoJson(json_Old_Fort_UtilitiesElectric_Lines_OldFort_6, {
+        map.createPane('pane_OldFortElectricLines_8');
+        map.getPane('pane_OldFortElectricLines_8').style.zIndex = 408;
+        map.getPane('pane_OldFortElectricLines_8').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortElectricLines_8 = new L.geoJson(json_OldFortElectricLines_8, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
-            layerName: 'layer_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
-            pane: 'pane_Old_Fort_UtilitiesElectric_Lines_OldFort_6',
-            onEachFeature: pop_Old_Fort_UtilitiesElectric_Lines_OldFort_6,
-            style: style_Old_Fort_UtilitiesElectric_Lines_OldFort_6_0,
+            dataVar: 'json_OldFortElectricLines_8',
+            layerName: 'layer_OldFortElectricLines_8',
+            pane: 'pane_OldFortElectricLines_8',
+            onEachFeature: pop_OldFortElectricLines_8,
+            style: style_OldFortElectricLines_8_0,
         });
-        bounds_group.addLayer(layer_Old_Fort_UtilitiesElectric_Lines_OldFort_6);
-        map.addLayer(layer_Old_Fort_UtilitiesElectric_Lines_OldFort_6);
-        function pop_Old_Fort_UtilitiesElectric_Substations_OldFort_7(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['@id'] !== null ? autolinker.link(feature.properties['@id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['barrier'] !== null ? autolinker.link(feature.properties['barrier'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['cables'] !== null ? autolinker.link(feature.properties['cables'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['circuits'] !== null ? autolinker.link(feature.properties['circuits'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['frequency'] !== null ? autolinker.link(feature.properties['frequency'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['operator'] !== null ? autolinker.link(feature.properties['operator'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['operator:wikidata'] !== null ? autolinker.link(feature.properties['operator:wikidata'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['power'] !== null ? autolinker.link(feature.properties['power'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['substation'] !== null ? autolinker.link(feature.properties['substation'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['voltage'] !== null ? autolinker.link(feature.properties['voltage'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['wires'] !== null ? autolinker.link(feature.properties['wires'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortElectricLines_8);
+        map.addLayer(layer_OldFortElectricLines_8);
+        function pop_OldFortElectricSubstations_9(feature, layer) {
+            var popupContent = ofPopup(feature, 'Electric Substation', [['name', 'Name'], ['substation', 'Substation type'], ['operator', 'Operator'], ['voltage', 'Voltage (V)'], ['power', 'Infrastructure type']], 'OpenStreetMap-derived infrastructure; operator and locations should be verified.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Old_Fort_UtilitiesElectric_Substations_OldFort_7_0(feature) {
+        function style_OldFortElectricSubstations_9_0(feature) {
             switch(String(feature.properties['substation'])) {
                 case 'distribution':
                     return {
-                pane: 'pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7',
+                pane: 'pane_OldFortElectricSubstations_9',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -876,7 +510,7 @@
                     break;
                 case 'industrial':
                     return {
-                pane: 'pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7',
+                pane: 'pane_OldFortElectricSubstations_9',
                 opacity: 1,
                 color: 'rgba(62,38,70,1.0)',
                 dashArray: '',
@@ -891,83 +525,28 @@
                     break;
             }
         }
-        map.createPane('pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7');
-        map.getPane('pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7').style.zIndex = 407;
-        map.getPane('pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7').style['mix-blend-mode'] = 'normal';
-        var layer_Old_Fort_UtilitiesElectric_Substations_OldFort_7 = new L.geoJson(json_Old_Fort_UtilitiesElectric_Substations_OldFort_7, {
+        map.createPane('pane_OldFortElectricSubstations_9');
+        map.getPane('pane_OldFortElectricSubstations_9').style.zIndex = 409;
+        map.getPane('pane_OldFortElectricSubstations_9').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortElectricSubstations_9 = new L.geoJson(json_OldFortElectricSubstations_9, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Old_Fort_UtilitiesElectric_Substations_OldFort_7',
-            layerName: 'layer_Old_Fort_UtilitiesElectric_Substations_OldFort_7',
-            pane: 'pane_Old_Fort_UtilitiesElectric_Substations_OldFort_7',
-            onEachFeature: pop_Old_Fort_UtilitiesElectric_Substations_OldFort_7,
-            style: style_Old_Fort_UtilitiesElectric_Substations_OldFort_7_0,
+            dataVar: 'json_OldFortElectricSubstations_9',
+            layerName: 'layer_OldFortElectricSubstations_9',
+            pane: 'pane_OldFortElectricSubstations_9',
+            onEachFeature: pop_OldFortElectricSubstations_9,
+            style: style_OldFortElectricSubstations_9_0,
         });
-        bounds_group.addLayer(layer_Old_Fort_UtilitiesElectric_Substations_OldFort_7);
-        map.addLayer(layer_Old_Fort_UtilitiesElectric_Substations_OldFort_7);
-        function pop_Old_Fort_Addresses_8(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? autolinker.link(feature.properties['OBJECTID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ADDRESS'] !== null ? autolinker.link(feature.properties['ADDRESS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COMMUNITY'] !== null ? autolinker.link(feature.properties['COMMUNITY'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NUMBER'] !== null ? autolinker.link(feature.properties['NUMBER'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ZIP'] !== null ? autolinker.link(feature.properties['ZIP'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ESN'] !== null ? autolinker.link(feature.properties['ESN'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FIRE_DISTR'] !== null ? autolinker.link(feature.properties['FIRE_DISTR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PRE_DIR'] !== null ? autolinker.link(feature.properties['PRE_DIR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ROAD_NAME'] !== null ? autolinker.link(feature.properties['ROAD_NAME'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['ROAD_TYPE'] !== null ? autolinker.link(feature.properties['ROAD_TYPE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SUF_DIR'] !== null ? autolinker.link(feature.properties['SUF_DIR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EMS_STA'] !== null ? autolinker.link(feature.properties['EMS_STA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['XCOOR'] !== null ? autolinker.link(feature.properties['XCOOR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['YCOOR'] !== null ? autolinker.link(feature.properties['YCOOR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['TYPE'] !== null ? autolinker.link(feature.properties['TYPE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COMMENT'] !== null ? autolinker.link(feature.properties['COMMENT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['LOC'] !== null ? autolinker.link(feature.properties['LOC'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+        bounds_group.addLayer(layer_OldFortElectricSubstations_9);
+        map.addLayer(layer_OldFortElectricSubstations_9);
+        function pop_OldFortAddresses_10(feature, layer) {
+            var popupContent = ofPopup(feature, 'Address', [['ADDRESS', 'Street address'], ['COMMUNITY', 'Community'], ['ZIP', 'ZIP code']], 'McDowell County address reference.');
+            layer.bindPopup(popupContent, {maxHeight: 320, maxWidth: 330});
         }
 
-        function style_Old_Fort_Addresses_8_0() {
+        function style_OldFortAddresses_10_0() {
             return {
-                pane: 'pane_Old_Fort_Addresses_8',
+                pane: 'pane_OldFortAddresses_10',
                 radius: 1.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,0.0)',
@@ -981,40 +560,40 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Old_Fort_Addresses_8');
-        map.getPane('pane_Old_Fort_Addresses_8').style.zIndex = 408;
-        map.getPane('pane_Old_Fort_Addresses_8').style['mix-blend-mode'] = 'normal';
-        var layer_Old_Fort_Addresses_8 = new L.geoJson(json_Old_Fort_Addresses_8, {
+        map.createPane('pane_OldFortAddresses_10');
+        map.getPane('pane_OldFortAddresses_10').style.zIndex = 410;
+        map.getPane('pane_OldFortAddresses_10').style['mix-blend-mode'] = 'normal';
+        var layer_OldFortAddresses_10 = new L.geoJson(json_OldFortAddresses_10, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Old_Fort_Addresses_8',
-            layerName: 'layer_Old_Fort_Addresses_8',
-            pane: 'pane_Old_Fort_Addresses_8',
-            onEachFeature: pop_Old_Fort_Addresses_8,
+            dataVar: 'json_OldFortAddresses_10',
+            layerName: 'layer_OldFortAddresses_10',
+            pane: 'pane_OldFortAddresses_10',
+            onEachFeature: pop_OldFortAddresses_10,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Old_Fort_Addresses_8_0(feature));
+                return L.circleMarker(latlng, style_OldFortAddresses_10_0(feature));
             },
         });
-        var cluster_Old_Fort_Addresses_8 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+        var cluster_OldFortAddresses_10 = new L.MarkerClusterGroup({showCoverageOnHover: false,
             spiderfyDistanceMultiplier: 2});
-        cluster_Old_Fort_Addresses_8.addLayer(layer_Old_Fort_Addresses_8);
+        cluster_OldFortAddresses_10.addLayer(layer_OldFortAddresses_10);
 
-        bounds_group.addLayer(layer_Old_Fort_Addresses_8);
-        cluster_Old_Fort_Addresses_8.addTo(map);
+        bounds_group.addLayer(layer_OldFortAddresses_10);
+        cluster_OldFortAddresses_10.addTo(map);
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Old_Fort_Addresses_8.png" /> Old_Fort_Addresses': cluster_Old_Fort_Addresses_8,'Old_Fort_Utilities — Electric_Substations_OldFort<br /><table><tr><td style="text-align: center;"><img src="legend/Old_Fort_UtilitiesElectric_Substations_OldFort_7_distribution0.png" /></td><td>distribution</td></tr><tr><td style="text-align: center;"><img src="legend/Old_Fort_UtilitiesElectric_Substations_OldFort_7_industrial1.png" /></td><td>industrial</td></tr></table>': layer_Old_Fort_UtilitiesElectric_Substations_OldFort_7,'Old_Fort_Utilities — Electric_Lines_OldFort<br /><table><tr><td style="text-align: center;"><img src="legend/Old_Fort_UtilitiesElectric_Lines_OldFort_6_100kV0.png" /></td><td>100 kV</td></tr><tr><td style="text-align: center;"><img src="legend/Old_Fort_UtilitiesElectric_Lines_OldFort_6_115kV1.png" /></td><td>115 kV</td></tr><tr><td style="text-align: center;"><img src="legend/Old_Fort_UtilitiesElectric_Lines_OldFort_6_44kV2.png" /></td><td>44 kV</td></tr></table>': layer_Old_Fort_UtilitiesElectric_Lines_OldFort_6,'<img src="legend/Water_Facilities_5.png" /> Water_Facilities': layer_Water_Facilities_5,'<img src="legend/Sewer_Facilities_4.png" /> Sewer_Facilities': layer_Sewer_Facilities_4,'<img src="legend/Old_Fort_UtilitiesParcels_Clip_3.png" /> Old_Fort_Utilities — Parcels_Clip': layer_Old_Fort_UtilitiesParcels_Clip_3,'Broadband_FCC_Availability_2025<br /><table><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_2_0200.png" /></td><td>0 - 20 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_2_20401.png" /></td><td>20 - 40 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_2_40602.png" /></td><td>40 - 60 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_2_60803.png" /></td><td>60 - 80 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_2_801004.png" /></td><td>80 - 100 %</td></tr></table>': layer_Broadband_FCC_Availability_2025_2,'<img src="legend/Old_Fort_UtilitiesStudy_Area_1.png" /> Old_Fort_Utilities — Study_Area': layer_Old_Fort_UtilitiesStudy_Area_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/OldFortAddresses_10.png" /> Addresses (search)': cluster_OldFortAddresses_10,'Electric Substations (OSM)<br /><table><tr><td style="text-align: center;"><img src="legend/OldFortElectricSubstations_9_distribution0.png" /></td><td>distribution</td></tr><tr><td style="text-align: center;"><img src="legend/OldFortElectricSubstations_9_industrial1.png" /></td><td>industrial</td></tr></table>': layer_OldFortElectricSubstations_9,'Electric Lines (OSM)<br /><table><tr><td style="text-align: center;"><img src="legend/OldFortElectricLines_8_100kV0.png" /></td><td>100 kV</td></tr><tr><td style="text-align: center;"><img src="legend/OldFortElectricLines_8_115kV1.png" /></td><td>115 kV</td></tr><tr><td style="text-align: center;"><img src="legend/OldFortElectricLines_8_44kV2.png" /></td><td>44 kV</td></tr></table>': layer_OldFortElectricLines_8,'<img src="legend/OldFortWaterFacilities_7.png" /> Water Facilities (approx.)': layer_OldFortWaterFacilities_7,'<img src="legend/OldFortSewer_Facilities_6.png" /> Sewer Facility (approx.)': layer_OldFortSewer_Facilities_6,'<img src="legend/OldFortParcels_5.png" /> Property Parcels': layer_OldFortParcels_5,'<img src="legend/OldFortMunicipal_Boundary_4.png" /> Municipal Boundary': layer_OldFortMunicipal_Boundary_4,'FCC Broadband Availability (2025)<br /><table><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_3_0200.png" /></td><td>0 - 20 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_3_20401.png" /></td><td>20 - 40 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_3_40602.png" /></td><td>40 - 60 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_3_60803.png" /></td><td>60 - 80 %</td></tr><tr><td style="text-align: center;"><img src="legend/Broadband_FCC_Availability_2025_3_801004.png" /></td><td>80 - 100 %</td></tr></table>': layer_Broadband_FCC_Availability_2025_3,'<img src="legend/OldFortElectric_Service_Territory_2.png" /> Electric Territory (2018)': layer_OldFortElectric_Service_Territory_2,'<img src="legend/OldFortGrowthCorridor_1.png" /> Study Area / Growth Corridors': layer_OldFortGrowthCorridor_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         var i = 0;
-        layer_Sewer_Facilities_4.eachLayer(function(layer) {
+        layer_OldFortSewer_Facilities_6.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['facility_name'] !== null?String('<div style="color: #323232; font-size: 8pt; font-weight: bold; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['facility_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Sewer_Facilities_4'});
+            layer.bindTooltip((layer.feature.properties['facility_name'] !== null?String('<div style="color: #323232; font-size: 8pt; font-weight: bold; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['facility_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_OldFortSewer_Facilities_6'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1022,12 +601,12 @@
               i++;
         });
         var i = 0;
-        layer_Water_Facilities_5.eachLayer(function(layer) {
+        layer_OldFortWaterFacilities_7.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['facility_name'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['facility_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Water_Facilities_5'});
+            layer.bindTooltip((layer.feature.properties['facility_name'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['facility_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_OldFortWaterFacilities_7'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -1035,21 +614,21 @@
               i++;
         });
         map.addControl(new L.Control.Search({
-            layer: cluster_Old_Fort_Addresses_8,
+            layer: cluster_OldFortAddresses_10,
             initial: false,
             hideMarkerOnCollapse: true,
             propertyName: 'ADDRESS'}));
         document.getElementsByClassName('search-button')[0].className +=
          ' fa fa-binoculars';
-        resetLabels([layer_Sewer_Facilities_4,layer_Water_Facilities_5]);
+        resetLabels([layer_OldFortSewer_Facilities_6,layer_OldFortWaterFacilities_7]);
         map.on("zoomend", function(){
-            resetLabels([layer_Sewer_Facilities_4,layer_Water_Facilities_5]);
+            resetLabels([layer_OldFortSewer_Facilities_6,layer_OldFortWaterFacilities_7]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_Sewer_Facilities_4,layer_Water_Facilities_5]);
+            resetLabels([layer_OldFortSewer_Facilities_6,layer_OldFortWaterFacilities_7]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_Sewer_Facilities_4,layer_Water_Facilities_5]);
+            resetLabels([layer_OldFortSewer_Facilities_6,layer_OldFortWaterFacilities_7]);
         });
         </script>
     </body>
